@@ -111,7 +111,7 @@ header {
   font-weight: 800;
   color: var(--white);
   letter-spacing: 0.15em;
-  text-shadow: 2px 2px 0px var(--neon-yellow);
+  ;
 }
 
 .nav-tabs {
