@@ -1,0 +1,166 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{parskip}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+% Configuración de página
+\geometry{
+    a4paper,
+    margin=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm,
+    headheight=1.5cm
+}
+
+% Configuración de encabezados y pies de página
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Corrección Video de Avance}}
+\fancyhead[R]{\textbf{Grupo 5}}
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Configuración de títulos
+\titleformat{\section}
+{\normalfont\Large\bfseries}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\large\bfseries}
+{\thesubsection}{1em}{}
+
+% Configuración de hipervínculos
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdfauthor={Grupo 5},
+    pdftitle={Corrección Video de Avance}
+}
+
+% Comandos personalizados
+\newcommand{\titulo}[1]{\textbf{#1}}
+\newcommand{\destacar}[1]{\textbf{\textcolor{blue}{#1}}}
+\newcommand{\comentario}[1]{\textcolor{gray}{\textit{#1}}}
+
+% Configuración de listas
+\setlist[itemize]{leftmargin=*, itemsep=0.5em}
+\setlist[enumerate]{leftmargin=*, itemsep=0.5em}
+
+\begin{document}
+
+% ==================== PÁGINA 1 ====================
+
+\section*{\Huge Corrección Video de Avance de Proyecto}
+\vspace{-0.5cm}
+
+\begin{center}
+\large Introducción a la Ciencia de Datos \\
+\Large \textbf{Grupo 5}
+\end{center}
+
+\vspace{1cm}
+
+\subsection*{Integrantes}
+\begin{itemize}[leftmargin=*]
+    \item \textbullet\ Giovanni Alexander Jimenez Andrade
+    \item \textbullet\ Bastián Marcelo Medina Gómez
+    \item \textbullet\ Cristobal Daniel Robinson Morales
+    \item \textbullet\ Nicole Alejandra Russo Martínez
+\end{itemize}
+
+\vspace{1cm}
+
+\section*{Comentarios de corrección}
+\noindent Mis comentarios se concentran exclusivamente en los puntos solicitados para la entrega del video de avance: problemática, pregunta(s) de análisis, descripción de los datos y análisis realizados hasta el momento.
+
+\vspace{0.5cm}
+
+\section{Problemática}
+
+Considero que la problemática que escogieron es pertinente para un proyecto de ciencia de datos, especialmente porque trabajan con información territorial que suele estar dispersa en distintas fuentes, formatos y escalas. La idea de integrar datos de predios, usos de suelo, equipamientos, paradas, servicios y redes es relevante, porque permite construir una visión más completa del territorio y habilita análisis espaciales que no serían posibles mirando cada fuente por separado.
+
+Me parece positivo que planteen el problema desde la dificultad de integrar información territorial. Ese es un problema real y muy propio de proyectos de datos: antes de analizar, modelar o concluir, muchas veces es necesario ordenar, limpiar, homologar y conectar bases que vienen de fuentes distintas. En ese sentido, el foco del avance está bien alineado con una etapa inicial de preparación de datos.
+
+Mi principal recomendación en este punto es que delimiten mejor para qué decisión o análisis final quieren construir esa integración. En el video queda claro que quieren preparar datos para un análisis espacial consistente, pero todavía falta precisar cuál es el problema sustantivo detrás de esa integración. Por ejemplo, podrían orientar la problemática hacia accesibilidad territorial, brechas de equipamiento, concentración de infraestructura, relación entre predios y servicios urbanos, o apoyo a decisiones de planificación. Mientras más claro quede ese objetivo final, más fácil será justificar qué datos integran y qué análisis realizan.
+
+\newpage
+% ==================== PÁGINA 2 ====================
+
+\section{Pregunta(s) de análisis}
+
+Las preguntas de análisis que plantean son pertinentes y están conectadas con la problemática. Me parece adecuado que se pregunten cómo se distribuyen los predios y usos de suelo en relación con equipamientos y servicios, qué zonas muestran mayor concentración de infraestructura y servicios, y si existen brechas territoriales según accesibilidad a equipamientos clave.
+
+Estas preguntas son interesantes porque llevan el proyecto más allá de la simple integración de bases. Les permiten pasar desde la preparación de datos hacia un análisis territorial propiamente tal, donde pueden observar patrones espaciales, concentración de servicios y posibles desigualdades entre zonas.
+
+Mi recomendación es que hagan estas preguntas más medibles. Por ejemplo, cuando hablen de concentración, deberían definir si la medirán mediante cantidad de equipamientos por zona, densidad por kilómetro cuadrado, mapas de calor, conteos por comuna, conteos por manzana o distancia promedio a servicios. Del mismo modo, cuando hablen de accesibilidad, deberían precisar si usarán distancia euclidiana, distancia a través de red vial, cercanía a paradas de transporte, tiempo estimado de viaje o número de servicios disponibles dentro de cierto radio.
+
+También les sugiero definir con claridad la unidad de análisis. No es lo mismo responder las preguntas a nivel de predio, manzana, comuna, grilla espacial o zona de influencia. Esa decisión es clave, porque determina qué cruces de datos son válidos y cómo deben interpretarse los resultados.
+
+\vspace{0.5cm}
+
+\section{Descripción de los datos}
+
+La descripción de los datos muestra que han identificado varias fuentes relevantes para el análisis territorial. Ustedes mencionan predios por comuna en archivos parquet, capas territoriales como comunas y red vial de la Región Metropolitana, equipamientos de educación y salud en formato geojson, y datos de movilidad como paradas, servicios y trazados consolidados en archivos zip o xlsx. Esta variedad de fuentes es una fortaleza, porque permite construir una mirada territorial más completa.
+
+También me parece positivo que distingan entre tipos de datos: datos prediales, capas territoriales, equipamientos y movilidad. Esa clasificación ayuda a entender el rol que cumple cada fuente dentro del proyecto. Además, el uso de información geoespacial abre la posibilidad de realizar análisis visuales y cuantitativos bastante interesantes.
+
+Para mejorar esta sección, les recomiendo describir con mayor precisión cada base de datos. En particular, deberían indicar la fuente exacta, el período o fecha de actualización, la cobertura territorial, el formato, las variables principales y la unidad de observación. También sería importante explicar si todas las capas están en el mismo sistema de coordenadas, si fue necesario reproyectar geometrías, si existen datos faltantes, duplicados o geometrías inválidas, y cómo trataron esos problemas.
+
+Además, les sugiero explicar cómo planean unir las bases. En datos espaciales, la integración no depende solo de columnas comunes, sino también de relaciones geográficas: intersecciones, cercanía, contención espacial, buffers o uniones por comuna. Explicitar esa lógica de integración fortalecería mucho la descripción de los datos.
+
+\newpage
+% ==================== PÁGINA 3 ====================
+
+\section{Análisis realizados hasta el momento}
+
+El avance muestra que ya realizaron una parte importante del trabajo de preparación de datos. Ustedes mencionan la organización y revisión de carpetas y fuentes, la validación de formatos, la lectura de archivos principales, la normalización de columnas, la conversión de variables numéricas desde texto, el tratamiento de nulos y duplicados, y la preparación de una primera integración para análisis exploratorio. Ese trabajo es valioso, porque en un proyecto con datos territoriales de muchas fuentes la limpieza e integración suele ser una parte central del proceso.
+
+También se observa que comenzaron a construir visualizaciones y análisis exploratorios, como mapas de calor para equipamientos de educación y servicios de salud, además de una matriz de correlación para variables prediales de una comuna. Esto muestra que ya pasaron desde la carga de datos hacia una primera lectura analítica de la información.
+
+Mi principal recomendación es que conecten estos análisis de forma más directa con sus preguntas. Los mapas de calor son un buen primer paso para observar concentración espacial, pero deberían complementarlos con medidas cuantitativas. Por ejemplo, podrían calcular densidad de equipamientos por comuna o por zona, distancia promedio desde predios a servicios clave, cantidad de equipamientos dentro de ciertos radios, o cobertura de transporte cercana a cada zona.
+
+También les recomiendo revisar con cuidado el uso de la matriz de correlación. Puede ser útil para explorar relaciones entre variables numéricas, pero no todas las variables prediales son necesariamente adecuadas para ese análisis, especialmente si algunas son identificadores, códigos administrativos o variables categóricas codificadas como números. En la siguiente etapa deberían seleccionar mejor las variables que entran a la correlación y explicar qué interpretación territorial tiene cada relación observada.
+
+Finalmente, considero que el proyecto necesita avanzar desde la integración y exploración hacia indicadores más directamente relacionados con brechas territoriales. Por ejemplo, podrían construir un indicador simple de accesibilidad a educación, salud o transporte, y luego comparar zonas con alta y baja disponibilidad de servicios. Eso les permitiría transformar la integración de datos en evidencia concreta para responder sus preguntas.
+
+\vspace{0.5cm}
+
+\section*{Comentario general}
+
+En general, considero que el video presenta un buen avance inicial, especialmente en la preparación e integración de datos territoriales. Ustedes muestran claridad respecto de la dificultad de trabajar con múltiples fuentes, formatos y capas geográficas, y ya avanzaron en tareas relevantes de limpieza, validación y visualización exploratoria.
+
+Para la siguiente etapa, mi principal recomendación es que definan con mayor precisión el problema sustantivo que quieren responder y que conecten cada análisis con una pregunta concreta. La integración de datos es una parte muy importante del proyecto, pero debe conducir a resultados interpretables: concentración de servicios, accesibilidad, brechas territoriales o diferencias entre zonas. Si logran definir buenos indicadores espaciales y explicar claramente la unidad de análisis, el proyecto puede transformarse en un trabajo muy interesante de ciencia de datos aplicada al análisis territorial.
+
+\vspace{0.5cm}
+
+\begin{center}
+\hrule
+\vspace{0.3cm}
+\small \textit{Documento generado a partir de los comentarios de corrección del video de avance}
+\vspace{0.2cm}
+\\
+\small \textbf{Grupo 5 - Introducción a la Ciencia de Datos}
+\hrule
+\end{center}
+
+\end{document}

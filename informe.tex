@@ -1,0 +1,571 @@
+\documentclass[12pt, letterpaper]{article}
+
+% ── Paquetes ────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{datetime}
+
+% ── Colores ─────────────────────────────────────────────────────────────────
+\definecolor{primary}{HTML}{1B4F72}
+\definecolor{accent}{HTML}{2E86C1}
+\definecolor{lightgray}{HTML}{F2F3F4}
+\definecolor{darkgray}{HTML}{555555}
+
+% ── Hipervínculos ────────────────────────────────────────────────────────────
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    urlcolor=accent,
+    citecolor=accent,
+    pdftitle={Propuesta de Proyecto: Prediusly},
+    pdfauthor={Equipo Prediusly},
+}
+
+% ── Encabezado y pie de página ───────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkgray}\textit{Prediusly — Predicción de Precios de Viviendas y Predios}}
+\fancyhead[R]{\small\color{darkgray}\thepage}
+\fancyfoot[C]{\small\color{darkgray}Propuesta de Proyecto · \the\year}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Formato de secciones ─────────────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{primary}}
+  {\thesection.}{0.6em}{}[\vspace{-0.3em}\rule{\linewidth}{0.6pt}]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{accent}}
+  {\thesubsection.}{0.5em}{}
+
+\titlespacing{\section}{0pt}{1.4em}{0.6em}
+\titlespacing{\subsection}{0pt}{0.9em}{0.3em}
+
+% ── Título ───────────────────────────────────────────────────────────────────
+\title{%
+  {\LARGE\bfseries\color{primary} Prediusly}\\[0.3em]
+  {\large\color{darkgray} Predicción de Precios de Viviendas y Predios\\
+   en Áreas Metropolitanas mediante Datos Geoespaciales}\\[0.8em]
+  \rule{\linewidth}{1.2pt}\\[0.4em]
+  {\normalsize\color{darkgray} Propuesta de Proyecto}
+}
+\author{\color{darkgray} Equipo Prediusly}
+\date{\color{darkgray}10 de abril de 2026}
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\vspace{0.5em}
+{\centering\color{darkgray}
+\textbf{Equipo Prediusly}\\
+Cristobal Robinson Morales | Nicole Russo Martínez \\
+Giovanni Jimenez Andrade | Bastián Medina Gómez\par
+}
+
+\vspace{1em}
+
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Contexto y Motivación}
+
+El precio de las viviendas y predios urbanos es el resultado de una compleja
+interacción entre características físicas del inmueble, factores socioeconómicos
+del entorno y, de manera fundamental, la \textbf{accesibilidad y proximidad a
+servicios, infraestructura y equipamiento urbano}. Sin embargo, en Chile, y
+particularmente en el Gran Santiago, los modelos de valoración inmobiliaria
+disponibles públicamente suelen ignorar esta dimensión espacial, basándose
+únicamente en atributos internos del predio o en tasaciones catastrales que
+no capturan la dinámica real del mercado.
+
+Este proyecto nace de la confluencia de dos disciplinas dentro del equipo:
+\textbf{Planificación Urbana} y \textbf{Ciencia de Datos}. Uno de los integrantes
+trabaja actualmente con geodatos urbanos en el marco de proyectos de planificación
+territorial, mientras que los demás aportan experiencia en modelamiento estadístico
+y aprendizaje de máquina. Esta combinación permite abordar la problemática desde
+una perspectiva que integra el conocimiento del territorio con el rigor
+cuantitativo del análisis de datos.
+
+La motivación central es construir un modelo de predicción de precios inmobiliarios
+que incorpore explícitamente la \textbf{dimensión geoespacial}: ¿cuánto vale un
+predio según dónde está ubicado respecto a la red de metro, las paradas de
+microbús, los centros educacionales, los establecimientos de salud, la actividad
+comercial del entorno y otros factores urbanos medibles?
+
+\section{Marco Teórico}
+
+La valoración del suelo urbano se sustenta en un conjunto de teorías económicas
+y espaciales que explican cómo la localización, la accesibilidad y la estructura
+urbana determinan el precio de los predios. A continuación se presentan los
+principales marcos conceptuales que fundamentan este proyecto.
+
+\subsection{El Suelo como Bien Único}
+
+A diferencia de otros bienes transables, el suelo posee una naturaleza
+intrínsecamente singular que lo aleja del concepto de \textit{commodity}. Sus
+atributos se dividen en dos categorías fundamentales:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.3em]
+  \item \textbf{Atributos físicos:} determinados por la naturaleza; incluyen
+        topografía, composición del suelo, orientación y condiciones
+        medioambientales. Son fijos e inamovibles.
+  \item \textbf{Atributos de uso:} determinados por la sociedad a través
+        de normativas, planes reguladores y decisiones de zonificación. Definen
+        qué puede construirse, a qué densidad y con qué destino.
+\end{itemize}
+
+Dado que no existen dos predios exactamente iguales, pues cada uno ocupa una
+posición irrepetible en el espacio, el suelo constituye un bien
+\textbf{heterogéneo por definición}. La normativa urbanística amplifica esta
+heterogeneidad al asignar distintos derechos de edificación a predios contiguos,
+generando diferencias de valor que no responden únicamente a características
+físicas, sino a decisiones regulatorias. Esta singularidad justifica el uso de
+modelos geoespaciales que capturen la variación local del precio, en lugar de
+modelos globales que asuman homogeneidad en el mercado.
+
+\subsection{Teorías de la Renta del Suelo}
+
+\subsubsection*{Teoría Centro-Periferia: Johann Heinrich von Thünen (1783--1850)}
+
+Von Thünen formuló el primer modelo formal de renta del suelo, originalmente
+aplicado al uso agrícola. Su principio central establece que el valor de un
+predio decrece con la distancia al centro urbano (\textit{CBD}), en función de
+los costos de transporte necesarios para acceder a ese centro. La \textbf{renta
+de localización} resulta del diferencial entre el precio obtenido en el mercado
+central y los costos de trasladar la producción o la actividad desde el predio
+hasta dicho centro.
+
+Aunque concebida para contextos rurales, esta teoría sienta las bases del
+pensamiento moderno sobre gradientes de precios urbanos: a mayor accesibilidad
+al centro, mayor valor del suelo. Este principio es directamente observable en
+el Gran Santiago, donde los precios por metro cuadrado disminuyen de forma
+generalizada hacia la periferia.
+
+\subsubsection*{Teoría de la Maximización de la Renta: William Alonso (1964)}
+
+Alonso extendió el modelo de von Thünen al contexto urbano mediante su
+concepto de \textbf{\textit{bid-rent}} o curva de oferta de renta. En este
+marco, distintos agentes económicos —hogares, comercios, industrias— compiten
+por la localización urbana ofreciendo rentas que reflejan la utilidad que
+obtienen de cada emplazamiento. El equilibrio del mercado determina qué uso
+ocupa cada zona:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.3em]
+  \item Las actividades comerciales, que obtienen mayor beneficio de la
+        centralidad, pagan rentas más altas y se concentran en el centro.
+  \item Los hogares de mayores ingresos pueden elegir entre centralidad y
+        espacio, generando patrones mixtos de localización.
+  \item La industria, con menor sensibilidad a la accesibilidad comercial,
+        se desplaza hacia zonas periféricas donde la renta es menor.
+\end{itemize}
+
+El modelo de Alonso predice que el precio del suelo es una función decreciente
+y convexa de la distancia al centro, lo que constituye la hipótesis central que
+este proyecto busca contrastar y enriquecer con variables geoespaciales
+adicionales.
+
+\subsection{Economías de Aglomeración}
+
+Las \textbf{economías de aglomeración} describen los beneficios de productividad
+y bienestar que se generan cuando actividades económicas y personas se concentran
+en el espacio. En el contexto inmobiliario, se manifiestan de dos formas
+principales:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.3em]
+  \item \textbf{Economías de urbanización:} beneficios derivados del tamaño
+        total de la ciudad, como mayor oferta de trabajo, servicios especializados
+        e infraestructura compartida.
+  \item \textbf{Economías de localización:} beneficios para firmas o actividades
+        del mismo sector al estar próximas entre sí, como acceso a proveedores,
+        trabajadores especializados y derrames de conocimiento.
+\end{itemize}
+
+Desde el punto de vista del suelo, la aglomeración de comercios, servicios y
+empleos en un área incrementa su atractivo y, por tanto, la disposición a pagar
+por los predios adyacentes. La variable de \textit{conteo de patentes
+comerciales} en radios de proximidad, incluida en el diseño de \textit{features}
+de este proyecto, operacionaliza directamente este concepto.
+
+\section{Publico}
+
+\subsection{Audiencia Objetivo}
+
+El análisis está dirigido a múltiples audiencias:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.3em]
+  \item \textbf{Ciudadanos e instituciones públicas:} que necesitan comprender
+        la valorización diferenciada del suelo para evaluar políticas de vivienda
+        asequible, plusvalías asociadas a inversión pública y equidad territorial.
+  \item \textbf{Agentes inmobiliarios:} que buscan herramientas de
+        valoración más precisas para poder captura la plusvalía.
+  \item \textbf{Investigadores y planificadores urbanos:} interesados en cuantificar
+        el impacto de la infraestructura sobre el valor del suelo.
+  \item \textbf{Inversionistas y desarrolladores:} que requieren estimaciones de
+        precio para evaluar la viabilidad de proyectos.
+\end{itemize}
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Objetivos}
+
+\subsection{Objetivo General}
+
+Desarrollar un modelo predictivo del precio de viviendas y predios urbanos en
+el área metropolitana de Santiago, incorporando variables geoespaciales derivadas
+de capas de infraestructura, equipamiento y usos de suelo.
+
+\subsection{Objetivos Específicos}
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=0.4em]
+  \item \textbf{Caracterizar espacialmente} el mercado inmobiliario del área
+        de estudio, identificando patrones de valorización por zonas y relación
+        con el equipamiento urbano.
+  \item \textbf{Construir y evaluar modelos de regresión} que relacionen el precio
+        del inmueble con variables de accesibilidad (distancia a metro, paraderos,
+        colegios, etc.) y características estructurales del predio.
+  \item \textbf{Cuantificar el efecto marginal} de cada tipo de equipamiento
+        sobre el precio, respondiendo preguntas como: ¿Cuánto aumenta el precio
+        al estar a 100 m de una estación de metro? ¿Afecta negativamente la
+        cercanía a zonas de alta accidentabilidad laboral?
+  \item \textbf{Diseñar una herramienta de consulta} que permita estimar el
+        precio esperado de un predio según su ubicación y características.
+\end{enumerate}
+
+\subsection{Preguntas de Investigación}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.3em]
+  \item ¿Qué variables geoespaciales son los mejores predictores del precio de
+        un inmueble en el Gran Santiago?
+  \item ¿Existe un efecto de ``prima de accesibilidad'' asociado a la cercanía
+        al transporte público?
+  \item ¿Cómo varía espacialmente la importancia de los distintos factores a lo
+        largo de la ciudad (efectos heterogéneos)?
+\end{itemize}
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Datos}
+
+\subsection{Fuentes y Descripción General}
+
+El proyecto se apoya en un conjunto de \textbf{geodatabases} de acceso público,
+principalmente provenientes del \textbf{Instituto Nacional de Estadísticas (INE)},
+la \textbf{Infraestructura de Datos Espaciales de Chile (IDE Chile)}, portales
+de datos abiertos y fuentes complementarias de mercado. Todos los datos se
+encuentran en formatos geoespaciales estándar (\texttt{.shp}, \texttt{.geojson},
+\texttt{.gpkg}) y pueden ser procesados con herramientas de SIG de código abierto
+como QGIS, GeoPandas o PostGIS.
+
+\vspace{0.5em}
+\begin{center}
+\begin{tabular}{>{\bfseries}p{4cm} p{4.5cm} p{4.5cm}}
+\toprule
+\textbf{Capa} & \textbf{Descripción} & \textbf{Fuente} \\
+\midrule
+Precios inmobiliarios & Transacciones de compraventa de viviendas y predios & Portal Observatorio Mercado del Suelo / Scraping portales inmobiliarios \\
+\addlinespace
+Patentes comerciales & Localización georreferenciada de comercios habilitados & Municipios / IDE Chile \\
+\addlinespace
+Red de metro & Estaciones y líneas del Metro de Santiago & Metro S.A. / IDE Chile \\
+\addlinespace
+Transporte público & Recorridos y paraderos de RED (ex-Transantiago) & DTPM / IDE Chile \\
+\addlinespace
+Centros de salud & Hospitales, CESFAM, clínicas georref. & MINSAL / IDE Chile \\
+\addlinespace
+Educación & Colegios, liceos y universidades & Ministerio de Educación / IDE Chile \\
+\addlinespace
+Accidentabilidad laboral & Accidentes del trabajo georreferenciados & ACHS (datos parcialmente desactualizados) \\
+\addlinespace
+Datos censales & Información socioeconómica por manzana & INE Censo 2024 \\
+\addlinespace
+Redes Viales & Carreteras, vias expresas & BCN / IDE Chile \\
+\addlinespace
+Catastro de predios & Roles y atributos de predios urbanos & SII \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Características de los Datos}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.3em]
+  \item \textbf{Tipo:} Datos vectoriales de puntos, líneas y polígonos; tablas
+        de atributos asociadas; datos tabulares del INE y SII.
+  \item \textbf{Formato:} \texttt{.shp}, \texttt{.geojson}, \texttt{.gpkg},
+        \texttt{.csv}, \texttt{.xlsx}.
+  \item \textbf{Volumen:} Se estima trabajar con cientos de miles de registros
+        de predios para el área metropolitana de Santiago, más las capas de
+        infraestructura correspondientes.
+  \item \textbf{Sistema de Referencia:} Se usará \textbf{WGS84 / UTM Zona 19S}
+        (EPSG:32719) para garantizar consistencia métrica en los cálculos de
+        distancia.
+\end{itemize}
+
+\subsection{Variable Objetivo}
+
+El precio de venta por metro cuadrado (\$/m²) o el precio total de la transacción,
+obtenido de portales de publicación inmobiliaria mediante \textit{web scraping}
+(Portal Inmobiliario, Yapo, TocToc) o de registros del Conservador de Bienes
+Raíces cuando estén disponibles.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Diseño Tentativo}
+
+\subsection{Ingeniería de Variables Geoespaciales}
+
+A partir de las capas descritas se calcularán features de accesibilidad para
+cada predio de la muestra:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.3em]
+  \item \textbf{Distancia euclidiana, distancia Manhattan y por red vial} a la estación de metro,
+        paradero de bus y establecimiento de salud/educación más cercano.
+  \item \textbf{Conteo de amenidades} en radios de 250 m, 500 m y 1.000 m
+        (patentes comerciales, equipamientos, etc.).
+  \item \textbf{Índices de densidad} de accidentes laborales por zona.
+  \item \textbf{Variables contextuales censales} agregadas a nivel de manzana
+        o zona censal (ingreso promedio, hacinamiento, etc.).
+\end{itemize}
+
+\subsection{Modelos a Explorar}
+
+El análisis seguirá una progresión metodológica desde modelos interpretables
+hacia modelos de mayor capacidad predictiva:
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=0.4em]
+  \item \textbf{Regresión Hedónica (OLS):} modelo de referencia que relaciona
+        el precio con características físicas y de localización, siguiendo la
+        tradición de Rosen (1974). Permite interpretar directamente el efecto
+        marginal de cada variable.
+  \item \textbf{Regresión Geográficamente Ponderada (GWR):} extensión espacial
+        del OLS que permite que los coeficientes varíen en el espacio, capturando
+        heterogeneidades locales.
+  \item \textbf{Modelos de ensamble:} Random Forest y Gradient Boosting
+        (XGBoost/LightGBM) para capturar relaciones no lineales e interacciones
+        entre variables, con análisis de importancia de features vía SHAP.
+  \item \textbf{Redes neuronales con embedding espacial} (exploración opcional):
+        incorporar coordenadas o embeddings de vecindario para capturar dependencia
+        espacial de manera implícita.
+\end{enumerate}
+
+\subsection{Evaluación y Validación}
+
+Los modelos se evaluarán mediante \textbf{validación cruzada espacial}
+(\textit{spatial k-fold}), evitando fuga de información geográfica entre
+conjuntos de entrenamiento y prueba. Las métricas principales serán:
+$R^2$, \textit{Root Mean Squared Error} (RMSE) y \textit{Mean Absolute
+Percentage Error} (MAPE).
+
+\subsection{Herramientas Tecnológicas}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+  \item \textbf{Lenguaje:} Python 3.10+
+  \item \textbf{SIG y geodatos:} GeoPandas, Shapely, Fiona, PostGIS
+  \item \textbf{Modelamiento:} scikit-learn, XGBoost, LightGBM, mgwr
+  \item \textbf{Visualización:} Matplotlib, Seaborn, Kepler.gl / Folium
+  \item \textbf{Entorno:} Jupyter Notebooks + GitHub para control de versiones
+\end{itemize}
+
+\section{Uso de LLM}
+
+Para explorar y determinar qué opciones de modelos existen y son adecuados para la tarea propuesta,
+se utilizó \textbf{Claude Sonnet 4.6} como asistente de modelamiento. A continuación se presenta la
+conversación sostenida con el modelo.
+
+\bigskip
+
+% ---------------------------------------------------------------
+% Paquetes requeridos (agregar en el preámbulo si no están):
+%   \usepackage{mdframed, xcolor, fontawesome5, geometry, lmodern}
+%   \usepackage[most]{tcolorbox}
+%   \usepackage{enumitem}
+%   \usepackage{parskip}
+% ---------------------------------------------------------------
+
+% ---------- Definición de colores ----------
+\definecolor{userbg}{RGB}{241,240,235}
+\definecolor{userborder}{RGB}{180,178,169}
+\definecolor{aibg}{RGB}{230,241,251}
+\definecolor{aiborder}{RGB}{55,138,221}
+\definecolor{codeboxbg}{RGB}{245,244,240}
+\definecolor{codeborder}{RGB}{200,198,190}
+\definecolor{labelai}{RGB}{24,95,165}
+\definecolor{labeluser}{RGB}{80,78,72}
+\definecolor{kwcolor}{RGB}{127,119,221}   % purple keywords
+\definecolor{strcolor}{RGB}{13,158,117}   % teal strings
+\definecolor{cmtcolor}{RGB}{136,135,128}  % gray comments
+
+% ---------- Entornos de burbuja ----------
+
+% Burbuja del usuario (centrada, ancho completo, gris claro)
+\newenvironment{usermsg}{%
+  \begin{tcolorbox}[
+    enhanced,
+    colback=userbg,
+    colframe=userborder,
+    arc=8pt,
+    boxrule=0.4pt,
+    left=10pt, right=10pt, top=7pt, bottom=7pt,
+    fontupper=\small,
+    before upper={\textcolor{labeluser}{\textbf{\small Usuario}}\par\smallskip},
+    before={\smallskip},
+    after={\smallskip}
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+% Burbuja del asistente (izquierda, azul claro)
+\newenvironment{aimsg}{%
+  \begin{tcolorbox}[
+    enhanced,
+    colback=aibg,
+    colframe=aiborder,
+    arc=8pt,
+    boxrule=0.4pt,
+    left=10pt, right=10pt, top=7pt, bottom=7pt,
+    fontupper=\small,
+    before upper={\textcolor{labelai}{\textbf{\small Claude Sonnet 4.6}}\par\smallskip},
+    before={\begin{flushleft}\begin{minipage}{0.88\linewidth}},
+    after={\end{minipage}\end{flushleft}\smallskip}
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+% Bloque de código inline dentro de burbuja
+\newcommand{\inlinecode}[1]{%
+  \colorbox{codeboxbg}{\texttt{\small #1}}%
+}
+
+% Bloque de código multilínea dentro de burbuja
+\newenvironment{codeblock}{%
+  \begin{tcolorbox}[
+    colback=codeboxbg,
+    colframe=codeborder,
+    arc=4pt,
+    boxrule=0.3pt,
+    left=8pt, right=8pt, top=5pt, bottom=5pt,
+    fontupper=\ttfamily\footnotesize,
+    before={\smallskip},
+    after={\smallskip}
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+% ================================================================
+%  CONVERSACIÓN
+% ================================================================
+
+\begin{usermsg}
+Tenemos diversos shp y geopackages de líneas y paradas de metro, bus, centros de salud,
+educacionales, comerciales, entre otros. ¿Qué modelos de modelamiento matemático--computacional
+nos recomiendas para predecir los precios de diversos predios, asumiendo que el suelo es un bien
+heterogéneo por definición?
+\end{usermsg}
+
+\begin{aimsg}
+Dado que disponen de capas SHP y GeoPackages de transporte, equipamiento y comercio, el camino
+metodológico natural se organiza en cuatro familias de modelos, siguiendo una progresión desde
+modelos interpretables hacia modelos de mayor capacidad predictiva:
+
+\medskip
+\textbf{Modelos a explorar:}
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=0.4em]
+  \item \textbf{Regresión Hedónica (OLS):} modelo de referencia que relaciona
+        el precio con características físicas y de localización, siguiendo la
+        tradición de Rosen (1974). Permite interpretar directamente el efecto
+        marginal de cada variable.
+  \item \textbf{Regresión Geográficamente Ponderada (GWR):} extensión espacial
+        del OLS que permite que los coeficientes varíen en el espacio, capturando
+        heterogeneidades locales.
+  \item \textbf{Modelos de ensamble:} Random Forest y Gradient Boosting
+        (XGBoost/LightGBM) para capturar relaciones no lineales e interacciones
+        entre variables, con análisis de importancia de features vía SHAP.
+  \item \textbf{Redes neuronales con embedding espacial} (exploración opcional):
+        incorporar coordenadas o embeddings de vecindario para capturar dependencia
+        espacial de manera implícita.
+\end{enumerate}
+
+\medskip
+\textbf{Evaluación y validación:}
+
+Los modelos se evaluarán mediante \textbf{validación cruzada espacial}
+(\textit{spatial k-fold}), evitando fuga de información geográfica entre
+conjuntos de entrenamiento y prueba. Las métricas principales serán:
+$R^2$, \textit{Root Mean Squared Error} (RMSE) y \textit{Mean Absolute
+Percentage Error} (MAPE).
+
+\medskip
+\textbf{Herramientas tecnológicas:}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+  \item \textbf{Lenguaje:} Python 3.10+
+  \item \textbf{SIG y geodatos:} GeoPandas, Shapely, Fiona, PostGIS
+  \item \textbf{Modelamiento:} scikit-learn, XGBoost, LightGBM, mgwr
+  \item \textbf{Visualización:} Matplotlib, Seaborn, Kepler.gl / Folium
+  \item \textbf{Entorno:} Jupyter Notebooks + GitHub para control de versiones
+\end{itemize}
+\end{aimsg}
+
+\begin{usermsg}
+¿Cuáles son las variables de entrada más relevantes que podemos extraer directamente desde
+nuestros archivos SHP y GeoPackages?
+\end{usermsg}
+
+\begin{aimsg}
+Desde las capas disponibles es posible derivar cuatro grupos de variables de localización:
+
+\medskip
+\textbf{Accesibilidad a transporte:}
+\begin{itemize}
+  \item Distancia euclidiana y por red vial a la parada de metro o bus más cercana.
+  \item Número de líneas de bus en un radio de 500\,m y 1\,000\,m (\textit{buffer count}).
+  \item Índice de frecuencia de servicio ponderado por distancia.
+\end{itemize}
+
+\textbf{Equipamiento de salud y educación:}
+\begin{itemize}
+  \item Distancia al centro de salud primario más cercano (CESFAM, consultorio).
+  \item Número de establecimientos educacionales (básica, media) en radio de 1\,km.
+  \item Clasificación del establecimiento más cercano (público / subvencionado / particular).
+\end{itemize}
+
+\textbf{Centralidad comercial:}
+\begin{itemize}
+  \item Densidad de comercio en radio de 500\,m (puntos por $\text{km}^2$).
+  \item Distancia al nodo comercial de mayor densidad (centro de barrio).
+\end{itemize}
+
+\textbf{Entorno físico y uso de suelo:}
+\begin{itemize}
+  \item Categoría de uso de suelo dominante en buffer de 250\,m.
+  \item Superficie de áreas verdes accesibles en radio de 800\,m.
+  \item Pendiente media del terreno (si se dispone de DEM).
+\end{itemize}
+
+\medskip
+Todas estas variables se calculan con \inlinecode{geopandas} mediante operaciones de
+\inlinecode{sjoin}, \inlinecode{buffer} y \inlinecode{distance}, o equivalentemente en
+\inlinecode{PostGIS} con funciones \inlinecode{ST\_DWithin} y \inlinecode{ST\_Distance}.
+\end{aimsg}
+
+\end{document}

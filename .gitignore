@@ -1,0 +1,37 @@
+# Dependencias
+node_modules/
+.env
+
+# Archivos de Datos (Demasiado pesados para GitHub)
+/Aeropuertos/
+/IPT_Metropolitana/
+/Paradas_micro/
+/SII_2020/
+/SII_2025/
+/educacion_escolar/
+/educacion_parvularia/
+/educacion_superior/
+/salud/
+/red_vial/
+/topografia/
+
+# Modelos y resultados
+/models/
+/outputs/
+
+# Archivos Geoespaciales y Datos Tabulares
+*.geojson
+*.gpkg
+*.shp
+*.dbf
+*.shx
+*.prj
+*.parquet
+*.csv
+*.xlsx
+*.zip
+
+# Python/Entornos
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
