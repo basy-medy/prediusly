@@ -21,6 +21,8 @@ node_modules/
 
 # Archivos Geoespaciales y Datos Tabulares
 *.geojson
+!prediusly/public/data/*.geojson
+!prediusly/dist/data/*.geojson
 *.gpkg
 *.shp
 *.dbf
