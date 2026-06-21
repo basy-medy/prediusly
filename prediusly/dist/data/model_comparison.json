@@ -1,0 +1,51 @@
+{
+  "OLS": {
+    "R2": 0.4331,
+    "RMSE_log": 0.5362,
+    "RMSE_CLP": 196756494.0,
+    "MAPE_pct": 46.68,
+    "ganador": false
+  },
+  "Random Forest": {
+    "R2": 0.3743,
+    "RMSE_log": 0.5633,
+    "RMSE_CLP": 53462097.0,
+    "MAPE_pct": 47.73,
+    "ganador": false
+  },
+  "LightGBM": {
+    "R2": 0.5866,
+    "RMSE_log": 0.4579,
+    "RMSE_CLP": 51188469.0,
+    "MAPE_pct": 37.64,
+    "ganador": true,
+    "tuned_optuna": true,
+    "optuna_best_params": {
+      "n_estimators": 600,
+      "max_depth": 12,
+      "learning_rate": 0.02030605783687948,
+      "num_leaves": 65,
+      "min_child_samples": 41,
+      "subsample": 0.9954888318934102,
+      "colsample_bytree": 0.645833212546373,
+      "reg_alpha": 1.490139026340029,
+      "reg_lambda": 0.027307649113289003
+    }
+  },
+  "XGBoost": {
+    "R2": 0.5188,
+    "RMSE_log": 0.494,
+    "RMSE_CLP": 50185400.0,
+    "MAPE_pct": 43.13,
+    "ganador": false
+  },
+  "GWR": {
+    "R2": 0.1358,
+    "RMSE_log": 0.8102,
+    "RMSE_CLP": 285674169.0,
+    "MAPE_pct": 82.19,
+    "ganador": false,
+    "nota": "GWR evaluado sobre muestra estratificada por comuna (n=3034) por restricciones de escala computacional (O(n^2) en mgwr). No participa como candidato a 'modelo ganador' de producción para las 2.2M predicciones completas; se usa para analizar no-estacionariedad espacial de los coeficientes (evidencia de bid-rent no lineal/heterogéneo en el espacio).",
+    "n_muestra": 3034
+  }
+}

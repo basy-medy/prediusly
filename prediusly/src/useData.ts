@@ -11,10 +11,10 @@ export function useData() {
     async function loadAll() {
       try {
         const [predRes, pipeRes, modelRes, shapRes] = await Promise.all([
-          fetch('/api/predictions'),
-          fetch('/api/pipeline-steps'),
-          fetch('/api/model-comparison'),
-          fetch('/api/shap-global'),
+          fetch('./data/predictions.geojson'),
+          fetch('./data/pipeline_steps.json'),
+          fetch('./data/model_comparison.json'),
+          fetch('./data/shap_global.json'),
         ]);
 
         const pred = await predRes.json();

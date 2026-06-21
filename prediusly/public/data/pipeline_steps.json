@@ -1,0 +1,270 @@
+{
+  "etapas": [
+    {
+      "nombre": "Datos crudos",
+      "descripcion": "3,789,659 registros de predios del SII (54 comunas de la Región Metropolitana)",
+      "n_registros": 3789659
+    },
+    {
+      "nombre": "Limpieza de predios",
+      "descripcion": "Filtrado secuencial: atributos válidos → habitacional → urbano → superficie 50-20,000 m² → sin outliers de avalúo",
+      "embudo": {
+        "01_total_cargados": 3789659,
+        "02_con_atributos_validos": 3623879,
+        "03_habitacional": 2405025,
+        "04_urbana": 2320806,
+        "05_rango_superficie": 2254999,
+        "06_con_geometria": 2254999,
+        "07_sin_outliers_avaluo": 2212777
+      },
+      "reglas": [
+        {
+          "paso": 1,
+          "nombre": "Atributos válidos",
+          "descripcion": "Descartar predios sin destinoDescripcion, ubicacion o pol_area_m2",
+          "descartados": 165780,
+          "ejemplo": "Caso real — rol 00044-00001 (ALHUÉ): rol=00044-00001, nombreComuna=ALHUÉ, destinoDescripcion=HABITACIONAL, ubicacion=URBANA, dc_avaluo_fiscal=7867048"
+        },
+        {
+          "paso": 2,
+          "nombre": "Filtro Habitacional",
+          "descripcion": "Solo predios con destinoDescripcion == 'HABITACIONAL'",
+          "descartados": 1218854,
+          "ejemplo": "Caso real — rol 00046-00001 (ALHUÉ): rol=00046-00001, nombreComuna=ALHUÉ, destinoDescripcion=AGRICOLA, ubicacion=RURAL, pol_area_m2=7676.967953868682, dc_avaluo_fiscal=7984200"
+        },
+        {
+          "paso": 3,
+          "nombre": "Filtro Urbano",
+          "descripcion": "Solo predios con ubicacion == 'URBANA'",
+          "descartados": 84219,
+          "ejemplo": "Caso real — rol 00045-00002 (ALHUÉ): rol=00045-00002, nombreComuna=ALHUÉ, destinoDescripcion=HABITACIONAL, ubicacion=RURAL, pol_area_m2=1476.6238698997568, dc_avaluo_fiscal=40066464"
+        },
+        {
+          "paso": 4,
+          "nombre": "Rango de superficie",
+          "descripcion": "50 ≤ superficie ≤ 20,000 m²",
+          "descartados": 65807,
+          "ejemplo": "Caso real — rol 00045-00007 (ALHUÉ): rol=00045-00007, nombreComuna=ALHUÉ, destinoDescripcion=HABITACIONAL, ubicacion=URBANA, pol_area_m2=4.040374188354746, dc_avaluo_fiscal=15555629"
+        },
+        {
+          "paso": 5,
+          "nombre": "Outliers de avalúo",
+          "descripcion": "Remoción de avalúos extremos (percentil 1-99 POR COMUNA, no a nivel RM)",
+          "descartados": 42222,
+          "ejemplo": "Caso real — rol 00205-00031 (LAS CONDES): rol=00205-00031, nombreComuna=LAS CONDES, avaluo_fiscal=11110645935.0, percentil_1_comuna=28294634.48, percentil_99_comuna=807904857.6800016"
+        }
+      ]
+    },
+    {
+      "nombre": "Feature engineering geoespacial",
+      "descripcion": "Cálculo de distancias y conteos a equipamiento urbano, uso de suelo, topografía y variable temporal para cada predio",
+      "features_calculadas": [
+        {
+          "nombre": "dist_edu_escolar_m",
+          "descripcion": "Distancia euclidiana al establecimiento escolar más cercano (metros)"
+        },
+        {
+          "nombre": "count_edu_escolar_1km",
+          "descripcion": "Cantidad de establecimientos escolares dentro de 1 km"
+        },
+        {
+          "nombre": "dist_edu_parvularia_m",
+          "descripcion": "Distancia al jardín infantil/parvulario más cercano"
+        },
+        {
+          "nombre": "count_edu_parvularia_1km",
+          "descripcion": "Cantidad de parvularios dentro de 1 km"
+        },
+        {
+          "nombre": "dist_edu_superior_m",
+          "descripcion": "Distancia a la institución de educación superior más cercana"
+        },
+        {
+          "nombre": "count_edu_superior_1km",
+          "descripcion": "Cantidad de instituciones superiores dentro de 1 km"
+        },
+        {
+          "nombre": "dist_salud_m",
+          "descripcion": "Distancia al establecimiento de salud más cercano (filtrado, sin categorías excluidas)"
+        },
+        {
+          "nombre": "count_salud_1km",
+          "descripcion": "Cantidad de establecimientos de salud dentro de 1 km"
+        },
+        {
+          "nombre": "dist_metro_m",
+          "descripcion": "Distancia a la estación de Metro más cercana (solo existentes, no proyectadas)"
+        },
+        {
+          "nombre": "count_metro_1km",
+          "descripcion": "Cantidad de estaciones de Metro dentro de 1 km"
+        },
+        {
+          "nombre": "dist_micro_m",
+          "descripcion": "Distancia a la parada de micro/bus más cercana"
+        },
+        {
+          "nombre": "count_micro_500m",
+          "descripcion": "Cantidad de paradas de micro dentro de 500 m"
+        },
+        {
+          "nombre": "count_micro_1km",
+          "descripcion": "Cantidad de paradas de micro dentro de 1 km"
+        },
+        {
+          "nombre": "dist_aeropuerto_m",
+          "descripcion": "Distancia al aeropuerto/aeródromo más cercano (efecto negativo esperado)"
+        },
+        {
+          "nombre": "dist_red_vial_m",
+          "descripcion": "Distancia euclidiana al eje de la red vial clasificada más cercano (no es distancia por red, ver limitación documentada)"
+        },
+        {
+          "nombre": "uso_suelo_ipt",
+          "descripcion": "Uso de suelo dominante según Plan Regulador Metropolitano (buffer 250m)"
+        },
+        {
+          "nombre": "elevacion_m",
+          "descripcion": "Elevación interpolada desde curvas de nivel (cobertura 98.5% de la RM)"
+        },
+        {
+          "nombre": "pendiente_pct",
+          "descripcion": "Pendiente local estimada por diferencias finitas sobre la elevación interpolada"
+        },
+        {
+          "nombre": "superficie_m2",
+          "descripcion": "Superficie del polígono del predio en m²"
+        },
+        {
+          "nombre": "centroid_x",
+          "descripcion": "Coordenada X del centroide (UTM zona 19S, metros)"
+        },
+        {
+          "nombre": "centroid_y",
+          "descripcion": "Coordenada Y del centroide (UTM zona 19S, metros)"
+        },
+        {
+          "nombre": "variacion_avaluo_pct_2020_2025",
+          "descripcion": "Variación % de avalúo entre 2020 (manzana) y 2025 (predio). Variable de análisis territorial, NO usada como predictor del modelo (ver limitación en data_dictionary.md)."
+        }
+      ]
+    },
+    {
+      "nombre": "Modelo",
+      "descripcion": "Optimización de hiperparámetros con Optuna (Grid Search) y entrenamiento de 5 modelos (OLS, Random Forest, LightGBM, XGBoost, GWR) con validación cruzada espacial por comuna",
+      "comparacion_modelos": {
+        "OLS": {
+          "R2": 0.4331,
+          "RMSE_log": 0.5362,
+          "RMSE_CLP": 196756494.0,
+          "MAPE_pct": 46.68,
+          "ganador": false
+        },
+        "Random Forest": {
+          "R2": 0.3743,
+          "RMSE_log": 0.5633,
+          "RMSE_CLP": 53462097.0,
+          "MAPE_pct": 47.73,
+          "ganador": false
+        },
+        "LightGBM": {
+          "R2": 0.5866,
+          "RMSE_log": 0.4579,
+          "RMSE_CLP": 51188469.0,
+          "MAPE_pct": 37.64,
+          "ganador": true,
+          "tuned_optuna": true,
+          "optuna_best_params": {
+            "n_estimators": 600,
+            "max_depth": 12,
+            "learning_rate": 0.02030605783687948,
+            "num_leaves": 65,
+            "min_child_samples": 41,
+            "subsample": 0.9954888318934102,
+            "colsample_bytree": 0.645833212546373,
+            "reg_alpha": 1.490139026340029,
+            "reg_lambda": 0.027307649113289003
+          }
+        },
+        "XGBoost": {
+          "R2": 0.5188,
+          "RMSE_log": 0.494,
+          "RMSE_CLP": 50185400.0,
+          "MAPE_pct": 43.13,
+          "ganador": false
+        },
+        "GWR": {
+          "R2": 0.1358,
+          "RMSE_log": 0.8102,
+          "RMSE_CLP": 285674169.0,
+          "MAPE_pct": 82.19,
+          "ganador": false,
+          "nota": "GWR evaluado sobre muestra estratificada por comuna (n=3034) por restricciones de escala computacional (O(n^2) en mgwr). No participa como candidato a 'modelo ganador' de producción para las 2.2M predicciones completas; se usa para analizar no-estacionariedad espacial de los coeficientes (evidencia de bid-rent no lineal/heterogéneo en el espacio).",
+          "n_muestra": 3034
+        }
+      }
+    },
+    {
+      "nombre": "Predicción",
+      "descripcion": "Avalúo fiscal predicho para cada predio, con el top-3 de variables SHAP que más influyeron en su predicción individual"
+    }
+  ],
+  "ejemplos_limpieza": {
+    "educacion": {
+      "regla": "Clustering espacial por homonimia (DBSCAN, threshold 1.5 km) — aplicado por separado en cada nivel",
+      "niveles": {
+        "escolar": {
+          "original": 11285,
+          "en_rm": 2918,
+          "grupos_homonimos": 2897,
+          "fusionados": 2,
+          "final": 2916,
+          "ejemplo": "\"Colegio El Redentor\": 2 puntos con el mismo nombre dentro de 1.5 km se fusionaron en un solo punto representativo (centroide en UTM19S: 336704, 6291635)."
+        },
+        "parvularia": {
+          "original": 11951,
+          "en_rm": 3254,
+          "grupos_homonimos": 3133,
+          "fusionados": 2,
+          "final": 3252,
+          "ejemplo": "\"Colegio El Redentor\": 2 puntos con el mismo nombre dentro de 1.5 km se fusionaron en un solo punto representativo (centroide en UTM19S: 336704, 6291635)."
+        },
+        "superior": {
+          "original": 1297,
+          "en_rm": 526,
+          "grupos_homonimos": 89,
+          "fusionados": 333,
+          "final": 193,
+          "ejemplo": "\"Universidad De Chile\": 55 puntos con el mismo nombre dentro de 1.5 km se fusionaron en un solo punto representativo (centroide en UTM19S: 346463, 6298396)."
+        }
+      }
+    },
+    "salud": {
+      "regla": "Exclusión por categoría de tipo (18 categorías excluidas)",
+      "original": 5159,
+      "excluidos": 1189,
+      "final": 3970,
+      "conteo_excluidos": {
+        "ambiental": 1,
+        "atencion_remota": 2,
+        "conin": 5,
+        "cta": 2,
+        "dental": 330,
+        "dialisis": 108,
+        "direccion_ss": 29,
+        "especialidad": 19,
+        "funcionarios": 47,
+        "laboratorio": 366,
+        "movil": 48,
+        "oficina_sanitaria": 3,
+        "prais": 29,
+        "radiologico": 1,
+        "regulacion_samu": 1,
+        "sangre_tejidos": 1,
+        "setm": 85,
+        "vacunatorio": 112
+      },
+      "ejemplo": "\"Laboratorio Clínico de Agostini y Cia. Ltda.\" (tipo original: \"Laboratorio Clínico\") — excluido por pertenecer a la categoría 'laboratorio', la más numerosa entre las excluidas (366 casos)."
+    }
+  }
+}
