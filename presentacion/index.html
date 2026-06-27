@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediusly - Presentación Final Completa</title>
+  <meta name="description" content="Predicción Espacial de Precios Inmobiliarios y Análisis de Brechas Territoriales">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Grid -->
+  <div class="bg-grid"></div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Slide Counter -->
+  <div class="slide-counter" id="slideCounter">1 / 16</div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn" id="prevBtn">Anterior</button>
+    <button class="btn" id="nextBtn">Siguiente</button>
+  </div>
+
+  <div id="presentation">
+    
+    <!-- SLIDE 1: Título -->
+    <div class="slide active">
+      <div class="slide-content title-slide">
+        <h1>PREDIUSLY</h1>
+        <p class="subtitle">Predicción Espacial de Precios Inmobiliarios y Análisis de Brechas Territoriales en el Gran Santiago</p>
+        <div class="authors">
+          EQUIPO PREDIUSLY<br><br>
+          Cristobal Robinson | Nicole Russo<br>
+          Giovanni Jimenez | Bastián Medina
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Contexto -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Contexto y Problemática</h2>
+        <div class="grid-2">
+          <div>
+            <p>El precio de las viviendas y predios urbanos es el resultado de una compleja interacción entre características del inmueble y de manera fundamental, la <strong>accesibilidad y proximidad a servicios, infraestructura y equipamiento urbano</strong>.</p>
+            <p>La información territorial suele estar dispersa en múltiples fuentes (SII, MINSAL, RED, etc.).</p>
+          </div>
+          <div class="info-card">
+            <h3>Desafío de Integración</h3>
+            <p>Ordenar, limpiar, homologar y conectar bases dispares es esencial para habilitar un análisis espacial riguroso de la ciudad.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Preguntas -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Preguntas de Análisis</h2>
+        <p>A nivel de <strong>predio</strong>, formulamos las siguientes interrogantes que guían el proyecto:</p>
+        <div class="grid-2">
+          <div class="info-card">
+            <h3>Transporte</h3>
+            <p>¿Cómo varía espacialmente la rentabilidad o "prima de accesibilidad" que otorga la red de Metro o transporte público?</p>
+          </div>
+          <div class="info-card">
+            <h3>Infraestructura</h3>
+            <p>¿De qué forma la concentración de infraestructura (educación y salud) impacta positiva o negativamente en el precio?</p>
+          </div>
+          <div class="info-card" style="grid-column: span 2; border-color: var(--neon-yellow);">
+            <h3>Heterogeneidad</h3>
+            <p>¿Existen brechas territoriales significativas de accesibilidad y valor en diferentes zonas del Gran Santiago que evidencien heterogeneidad espacial en la curva de precios?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Marco Teórico 1 -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Marco Teórico: Teorías Clásicas</h2>
+        <div class="grid-2">
+          <div>
+            <p>El suelo constituye un bien <strong>heterogéneo por definición</strong>. Su valor decrece con la distancia al centro debido a los costos de transporte.</p>
+            <ul>
+              <li><strong>Johann Heinrich von Thünen (1826):</strong> Renta de localización.</li>
+              <li><strong>Modelo Alonso-Muth-Mills:</strong> Extensión al contexto urbano (curva <em>bid-rent</em>), donde los agentes económicos compiten por centralidad.</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>Curva Bid-Rent</h3>
+            <p>Comercios en el centro, seguidos de residencias y luego uso agrícola en la periferia. Determina el <strong>precio natural del suelo</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Marco Teórico 2 -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Economía Espacial Cuantitativa</h2>
+        <p>Más allá de las teorías clásicas, los modelos modernos de equilibrio espacial general son fundamentales para evaluar infraestructuras complejas.</p>
+        <div class="grid-2">
+          <div class="info-card" style="background: var(--black); color: var(--white);">
+            <h3 style="background: var(--neon-yellow); color: var(--black);">Reubicación de Actividad</h3>
+            <p style="color: var(--white);">A diferencia de las evaluaciones tradicionales (tiempo x usuarios), los modelos espaciales entienden cómo personas y empresas se <strong>reubican</strong> en respuesta a cambios de infraestructura.</p>
+          </div>
+          <div class="info-card">
+            <h3>Economías de Aglomeración</h3>
+            <p>Cuantificar cuánto valora la población la cercanía a amenidades (a través del precio del suelo) es el primer paso para evaluar <em>counterfactuals</em> de nuevas políticas urbanas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Pipeline de Limpieza (Flujo) -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Pipeline de Limpieza y Procesamiento</h2>
+        <p>El manejo de datos espaciales requiere un flujo robusto de homologación:</p>
+        <div class="mermaid">
+          graph TD
+            A[Fuentes: SII, Yapo, IDE, DTPM, MINSAL] --> B(Ingesta y Limpieza Inicial)
+            B --> C{Geometrías Inválidas}
+            C -->|Corregir/Dropeo| D[Proyección a WGS84 / UTM Zona 19S EPSG:32719]
+            C -->|Válidas| D
+            D --> E[Filtro de Outliers en Precio y Áreas]
+            E --> F[Imputación de Valores Nulos]
+            F --> G[Cálculo Geométrico: Feature Engineering]
+            G --> H((Base de Predios Enriquecida))
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Feature Engineering y Código -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Feature Engineering Espacial</h2>
+        <p>Calculamos distancias métricas e índices de aglomeración usando uniones espaciales y buffers.</p>
+        
+        <pre><code class="language-python"># Ejemplo: Calcular la distancia mínima al Metro usando GeoPandas
+import geopandas as gpd
+
+def get_nearest_metro(predios_gdf, metro_gdf):
+    # Spatial join para encontrar el vecino más cercano
+    # Automáticamente calcula la distancia métrica en UTM
+    nearest = gpd.sjoin_nearest(
+        predios_gdf, 
+        metro_gdf, 
+        how='left', 
+        distance_col='dist_metro_m'
+    )
+    return nearest</code></pre>
+        <div>
+          <span class="tag">Nearest Neighbor</span>
+          <span class="tag">Buffers de Influencia</span>
+          <span class="tag">Conteo (e.g. Colegios a 1km)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Fuga Espacial -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Fuga Espacial y la Ley de Tobler</h2>
+        <p style="font-size: 1.4rem; font-style: italic; border-left: 4px solid var(--neon-yellow); padding-left: 1rem; margin-bottom: 1rem;">
+          "Todo está relacionado con todo lo demás, pero las cosas cercanas están más relacionadas que las distantes."<br>
+          <span style="font-size: 1rem; font-weight: 800; font-style: normal;">— Waldo Tobler (Primera Ley de la Geografía, 1970)</span>
+        </p>
+        <p>Esto se traduce en <strong>Autocorrelación Espacial</strong>. En ML tradicional, un split Aleatorio mezcla predios de una misma cuadra en Train y Test. Como los predios cercanos tienen precios casi idénticos, el modelo <strong>memoriza el vecindario</strong> en vez de aprender, sobreestimando su precisión ("Spatial Leakage").</p>
+        <div class="grid-2">
+          <div class="info-card">
+            <h3>Solución: Spatial K-Fold</h3>
+            <p>Agrupamos la ciudad en macro-bloques espaciales (ej. con K-Means). Si un bloque es Train, todo su sector es Train. Obligamos al modelo a generalizar prestando atención a variables de accesibilidad, no a coordenadas, probándolo en <strong>barrios invisibles</strong>.</p>
+          </div>
+          <div class="mermaid">
+            graph LR
+              A(Mapa Gran Santiago) --> B[K-Means sobre coord_X, coord_Y]
+              B --> C[Bloques Espaciales Independientes]
+              C --> D[Fold 1: Norte Train, Sur Test]
+              C --> E[Fold 2: Sur Train, Este Test]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: ¿Cómo funciona LightGBM? -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>El Algoritmo Elegido: LightGBM</h2>
+        <div class="grid-2">
+          <div>
+            <p><strong>Light Gradient Boosting Machine</strong> es un ensamble de árboles de decisión.</p>
+            <ul>
+              <li><strong>Gradient Boosting:</strong> Construye árboles secuencialmente, donde cada nuevo árbol aprende de los <strong>errores (residuos)</strong> de los anteriores.</li>
+              <li><strong>Leaf-wise Growth:</strong> Crece nodo por nodo enfocado en la hoja con mayor reducción de error, resultando en convergencia ultrarrápida.</li>
+              <li>Maneja implícitamente no-linealidades (clave en relaciones espaciales).</li>
+            </ul>
+          </div>
+          <div class="mermaid">
+            graph TD
+              A[Árbol 1] -->|Calcula Error Residual| B[Árbol 2]
+              B -->|Calcula Error Residual| C[Árbol 3]
+              C -->|...| D[Predicción Final]
+              style B fill:#F0F040,stroke:#000
+              style C fill:#F0F040,stroke:#000
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Implementación del Modelo y Optuna -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Optimización de Hiperparámetros</h2>
+        <p>Utilizamos <strong>Optuna</strong> para la búsqueda de hiperparámetros bajo el esquema Spatial CV.</p>
+        <pre><code class="language-python">import lightgbm as lgb
+import optuna
+
+def objective(trial):
+    params = {
+        'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.1, log=True),
+        'num_leaves': trial.suggest_int('num_leaves', 20, 150),
+        'max_depth': trial.suggest_int('max_depth', 5, 20)
+    }
+    model = lgb.LGBMRegressor(**params)
+    
+    # Validamos usando la estrategia espacial para evitar Leakage
+    score = cross_val_score(model, X, log_precio, cv=spatial_cv, scoring='neg_mean_absolute_error')
+    
+    return score.mean()</code></pre>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: Resultados Globales -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Resultados: Modelos Globales</h2>
+        <p>Se testearon OLS, Random Forest, XGBoost y LightGBM sobre un dataset de validación cruzada y luego se puso a prueba en la base de mercado de <strong>Yapo</strong>.</p>
+        <div class="grid-3">
+          <div class="info-card" style="text-align: center;">
+            <h3>LightGBM (R²)</h3>
+            <div style="font-size: 3rem; font-weight: 800; font-family: var(--font-mono);">0.630</div>
+            <p>En datos de Yapo</p>
+          </div>
+          <div class="info-card" style="text-align: center;">
+            <h3>LightGBM (MAPE)</h3>
+            <div style="font-size: 3rem; font-weight: 800; font-family: var(--font-mono);">18.4%</div>
+            <p>Error Porcentual</p>
+          </div>
+          <div class="info-card">
+            <h3>Variables Clave</h3>
+            <ul>
+              <li><code>log_metros</code></li>
+              <li><code>coord_x, coord_y</code></li>
+              <li><code>dist_metro_m</code></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: El Problema Global -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Limitación: Estacionariedad Espacial</h2>
+        <p>Un modelo global (OLS o LightGBM) asume que la relación entre la distancia al metro y el precio del suelo es <strong>la misma en toda la ciudad</strong>.</p>
+        <div class="info-card" style="background: var(--black); color: var(--white); border-color: var(--neon-yellow);">
+          <h3 style="background: var(--neon-yellow); color: var(--black);">El dilema</h3>
+          <p style="color: var(--white);">¿Vale lo mismo estar a 100m de una estación de Metro en Providencia que a 100m en Puente Alto?</p>
+          <p style="color: var(--white);">El mercado nos dice empíricamente que <strong>NO</strong>. Las dinámicas socioeconómicas y la dotación barrial alteran la "prima de accesibilidad".</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: Regresión Geográficamente Ponderada -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Modelo Local: GWR</h2>
+        <div class="grid-2">
+          <div>
+            <p>Para solucionar la estática global, aplicamos <strong>Geographically Weighted Regression (GWR)</strong>.</p>
+            <p>GWR ajusta una regresión separada para cada predio, ponderando los datos vecinos según una campana Gaussiana (Kernel).</p>
+            <p>Los datos lejanos tienen peso 0. Esto permite que los coeficientes varíen libremente por el mapa.</p>
+          </div>
+          <pre><code class="language-python">from mgwr.gwr import GWR
+
+# 1. Definir el radio de influencia (bandwidth)
+# 2. Ajustar modelo local para las coordenadas
+gwr_model = GWR(coords, y, X, bw=bandwidth)
+results = gwr_model.fit()
+
+# Obtenemos un coeficiente de dist_metro 
+# ¡Para CADA PREDIO!
+coeficientes_locales = results.params</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14: Resultados GWR -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Hallazgos del Modelo GWR</h2>
+        <p>El GWR comprobó la existencia de <strong>No-estacionariedad Espacial</strong>. Las elasticidades de precio varían drásticamente dependiendo de la comuna.</p>
+        <div class="grid-2">
+          <div class="info-card" style="border-bottom: 6px solid var(--neon-yellow);">
+            <h3>Prima de Metro Heterogénea</h3>
+            <p>Los coeficientes locales para <code>dist_metro_m</code> mostraron rangos extremos: fuertemente negativos en sectores consolidados (el precio sube brutalmente al acercarse) y casi neutros en periferias críticas.</p>
+          </div>
+          <div class="info-card" style="border-bottom: 6px solid var(--neon-yellow);">
+            <h3>Brechas Reveladas</h3>
+            <p>La infraestructura sola no garantiza valorización si no está acompañada de servicios urbanos complementarios. El mercado de suelos penaliza o premia diferencialmente el equipamiento.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 15: Conclusiones Finales -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Conclusiones y Aportes</h2>
+        <ul>
+          <li><strong>Precisión Predictiva:</strong> LightGBM con Spatial CV logra excelentes métricas, sirviendo como una potente herramienta de tasación masiva (~18% MAPE).</li>
+          <li><strong>Integración Geoespacial:</strong> Demostramos el valor de la ingeniería de atributos espaciales usando distancias de red y buffers densos.</li>
+          <li><strong>Economía Espacial:</strong> El análisis local GWR destapa las profundas desigualdades en las rentas de aglomeración del Gran Santiago.</li>
+        </ul>
+        <div class="info-card" style="margin-top: 2rem;">
+          <h3>Futuro: Herramienta de Planificación Urbana</h3>
+          <p>Este motor predictivo sienta las bases para simular <em>escenarios hipotéticos</em> (ej: ¿Cómo cambiarán los precios de los barrios si trazamos la futura Línea 9 de Metro?).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 16: Cierre -->
+    <div class="slide title-slide">
+      <div class="slide-content title-slide" style="border: none; box-shadow: none; align-items: center;">
+        <h1>FIN</h1>
+        <p class="subtitle">Muchas gracias por su atención</p>
+        <div style="margin-top: 4rem; display: flex; gap: 2rem; justify-content: center;">
+          <a href="#" style="background: var(--white); color: var(--black); padding: 1rem 2rem; font-weight: 800; font-family: var(--font-mono); text-decoration: none; border: 3px solid var(--black); box-shadow: 4px 4px 0px var(--black);">DOCUMENTACIÓN</a>
+          <a href="#" style="background: var(--white); color: var(--black); padding: 1rem 2rem; font-weight: 800; font-family: var(--font-mono); text-decoration: none; border: 3px solid var(--black); box-shadow: 4px 4px 0px var(--black);">CÓDIGO FUENTE</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#F5F2E8',
+        primaryTextColor: '#0A0A0A',
+        primaryBorderColor: '#0A0A0A',
+        lineColor: '#0A0A0A',
+        secondaryColor: '#F0F040',
+        tertiaryColor: '#FFFFFF',
+        fontFamily: 'Inter, sans-serif'
+      }
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
